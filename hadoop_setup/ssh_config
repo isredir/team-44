@@ -1,0 +1,27 @@
+Host nn
+	User hadoop_test
+	Hostname 192.168.1.179
+
+Host dn0
+	User hadoop_test
+	Hostname 192.168.1.180
+
+Host dn1
+	User hadoop_test
+	Hostname 192.168.1.181
+
+Host nn_admin
+	User team
+	Hostname 192.168.1.179
+
+Host dn0_admin
+	User team
+	Hostname 192.168.1.180
+
+Host dn1_admin
+	User team
+	Hostname 192.168.1.181
+
+Host *
+	IdentitiesOnly Yes
+	StrictHostKeyChecking no
