@@ -32,16 +32,13 @@ echo 'export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin' >> ~/.profile
 scp ~/.profile dn0:~/
 scp ~/.profile dn1:~/
 
-echo "Pause available" -n
-echo $1 'sec'
-sleep $1
-echo "Pause unavailable"
-
 echo "Заполняем конфигурационные файлы..."
 # тут должны быть инструкции пользователя по редактированию файлов
 # например, пользователю нужно заполнить или заменить следующие строки
 cp ~/hadoop_setup/core-site.xml etc/hadoop/core-site.xml  
 cp ~/hadoop_setup/hdfs-site.xml etc/hadoop/hdfs-site.xml
+cp ~/hadoop_setup/mapred-site.xml etc/hadoop/mapred-site.xml
+cp ~/hadoop_setup/yarn-site.xml etc/hadoop/yarn-site.xml
 cp ~/hadoop_setup/workers etc/hadoop/workers
 
 echo "Создаем необходимые директории для NameNode и DataNode..."
@@ -53,20 +50,13 @@ scp -q -r ~/hadoop-3.4.0 dn0:~/
 scp -q -r ~/hadoop-3.4.0 dn1:~/
 scp -q -r ~/mydata dn0:~/
 scp -q -r ~/mydata dn1:~/
-# echo "Введите хосты (через пробел), на которые следует скопировать hadoop-3.4.0/:"
-# read -a hosts
-# 
-# for host in "${hosts[@]}"
-# do
-#   echo "Копируем Hadoop на $host..."
-#   scp -r ../hadoop-3.4.0 "$host:~/"
-# done
 
 echo "Форматируем name-node..."
 bin/hdfs namenode -format
 
 echo "Запускаем кластер..."
 sbin/start-dfs.sh
-# sbin/start-yarn.sh
+sbin/start-yarn.sh
+mapred --daemon start historyserver
 
 echo "Hadoop кластер запущен."
