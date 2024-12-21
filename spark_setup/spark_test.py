@@ -11,7 +11,7 @@ session = SparkSession.builder \
 
 df = session.read.csv("/input/customers-100000.csv", header=True, inferSchema=True)
 
-res_df = df.groupBy("Counrty").agg({"Index": "min", "Index": "max", "Index": "sum", "Customer Id": "count", "Subscription Date": "max", "Subscription Date": "min"}).sort("Counrty")
+res_df = df.groupBy("Country").agg({"Index": "min", "Index": "max", "Index": "sum", "Customer Id": "count", "Subscription Date": "max", "Subscription Date": "min"}).sort("Country")
 
 res_df.show()
 res_df.write.save("/input/customers_res.csv", format="csv")
