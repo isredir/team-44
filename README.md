@@ -3,7 +3,7 @@
 Участники команды:
 - Сизов Михаил
 - Герман Илья
-- Абизм Иван
+- Киселев Иван
 - Королев Алексей
 
 Чтобы развернуть кластер на трех узлах, нужно выполнить следующую инструкцию:
@@ -246,3 +246,43 @@
    ```
 
    Таким образом мы получили партиционированную таблицу customers в базе данных test.
+
+# Работа со Spark
+
+Для начала перенесем файлы для spark на namenode:
+
+```
+scp -r spark_setup/spark_setup.sh nn:~/
+scp -r spark_setup/spark_test.py nn:~/
+```
+
+Предполагается, что hadoop, yarn и hive запущены по инструкциям выше.
+
+Установим python на namenode
+
+```
+ssh team@namenode-ip
+sudo apt install python3.12-venv
+exit
+```
+
+Переходим на namenode и проводим установку:
+
+```
+ssh nn
+bash spark_setup.sh
+source ~/.profile
+```
+
+Теперь можем обработать csv файл, который мы ранее загрузили в hive с помощью pyspark
+
+```
+python3 -m venv .venv
+source .venv/bin/activate
+pip install pyspark
+python spark_test.py
+```
+
+Наш обработанный csv файл с группировкой, 6-ю агрегациями и сортировкой появился в хранилище в папке /input/
+
+![image](https://github.com/user-attachments/assets/73f17219-a330-4062-bf9b-23690d69458c)
