@@ -20,4 +20,4 @@ echo 'export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop' >> ~/.profile
 echo 'export SPARK_HOME=/home/hadoop_test/spark-3.5.3-bin-hadoop3' >> ~/.profile
 echo 'export PATH=$PATH:$SPARK_HOME/bin' >> ~/.profile
 echo 'export SPARK_DIST_CLASSPATH=$SPARK_HOME/jars/*:$(hadoop classpath)' >> ~/.profile
-echo 'PYSPARK_SUBMIT_ARGS="--master local[2] pyspark-shell"' >> ~/.profile
+echo 'export PYSPARK_SUBMIT_ARGS="--master local[2] pyspark-shell"' >> ~/.profile
