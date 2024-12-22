@@ -22,3 +22,4 @@ res_df = df.groupBy("Country").agg(
 
 res_df.show()
 res_df.write.save("/input/customers_res.csv", format="csv")
+res_df.write.saveAsTable("customers_res")
