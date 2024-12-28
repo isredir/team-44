@@ -1,0 +1,1 @@
+DROP EXTERNAL TABLE IF EXISTS team_44_customers_external;

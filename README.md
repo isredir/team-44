@@ -286,3 +286,91 @@ python spark_test.py
 Наш обработанный csv файл с группировкой, 6-ю агрегациями и сортировкой появился в хранилище в папке /input/
 
 ![image](https://github.com/user-attachments/assets/73f17219-a330-4062-bf9b-23690d69458c)
+
+
+# Работа с GreenPlum
+
+Зайдем на ноду c GP:
+```
+ssh user@91.185.85.***
+```
+
+создаем папку команды:
+```
+mkdir team-44-data
+```
+
+Далее загрузив файл с нашими данными с прошлых ДЗ убеждаемся в его цельности:
+```
+cat customers.csv
+```
+
+Посмотрим колонки таблицы:
+```
+head -n 1 customers.csv 
+```
+
+Запустим gpfdist:
+```
+gpfdist -p 2308 -d /home/user/team-44-data
+```
+или
+```
+gpfdist -f gpfdist.cfg
+```
+
+Напишем запрос для создания таблицы:
+[ссылка](greenplum/ext_table_up.sql)
+
+
+Зайдем в GP через psql:
+```
+psql -d idp
+```
+
+Создадим внешнюю таблицу:
+```sql
+DROP EXTERNAL TABLE IF EXISTS team_44_customers_external;
+
+CREATE EXTERNAL TABLE team_44_customers_external (
+Customer_Index integer,
+Customer_Id varchar(64),
+First_Name text,
+Last_Name text,
+Company text,
+City varchar(128),
+Country varchar(128),
+Phone_1 varchar(64),
+Phone_2 varchar(64),
+Email text,
+Subscription_Date date,
+Website text) 
+LOCATION('gpfdist://localhost:2308/customers.csv')
+FORMAT 'CSV' (DELIMITER ',' HEADER);
+```
+
+![external table creation](img/image.png)
+
+Прочитаем внешнюю таблицу:
+```sql
+SELECT * FROM team_44_customers_external;
+```
+
+Создадим таблицу в GP:
+```sql
+CREATE TABLE team_44_customers AS SELECT * FROM team_44_customers_external;
+```
+
+![GP internal table](img/image-1.png)
+
+Как результат у нас создалось две нужные рабочие таблицы
+![table](img/image-2.png)
+
+Теперь можно прогнать миграции удаляющую внешнюю таблицу для стриминга:
+```sql
+DROP EXTERNAL TABLE IF EXISTS team_44_customers_external;
+```
+
+И завершить процесс, сервер gpfdist через ctrl+c 
+
+Приятных праздников! с:
